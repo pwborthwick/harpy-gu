@@ -704,8 +704,8 @@ class rCC(object):
 
         if code == 'vv':
             im = np.diag(np.diag(self.f[v, v]))
-            im -= np.einsum('mane,mnbe->ab',  self.w[o, v, o, v], self.td, optimize=True)
-            im -= np.einsum('mane,mb,ne->ab', self.w[o, v, o, v], self.ts, self.ts, optimize=True)
+            im -= np.einsum('mbne,mnae->ab',  self.w[o, v, o, v], self.td, optimize=True)
+            im -= np.einsum('mbne,ma,ne->ab', self.w[o, v, o, v], self.ts, self.ts, optimize=True)
 
         if code == 'ov':
             im = np.einsum('iame,me->ia', self.w[o, v, o, v], self.ts, optimize=True)
