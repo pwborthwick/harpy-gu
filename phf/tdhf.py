@@ -85,10 +85,11 @@ class TDHF(object):
                 lo, hi = (dominant_transition//nvir) + 1, (dominant_transition - nvir*(dominant_transition//nvir)) + nocc + 1
 
                 #transition density
-                tdm = ci.transition_density(solve, root)
+                tdm = ci.transition_density(solve, root).reshape(nocc, -1)
 
                 #compute the electric length gauge transition dipole 
                 length_electric = np.einsum('ia,xia->x', tdm, self.dipole()[:, o, v], optimize=True)
+                
                 #oscillator strength
                 oscillator_length = (2/3) * transition_energy * np.einsum('p,p->', length_electric, length_electric, optimize=True)
 
@@ -254,29 +255,3 @@ class RT_TDHF(object):
             return cache
 
         self.cache = second_order_magnus(h, fock_p, density_p, density)
-
-
-if __name__ == '__main__':
-    from mol.mol import molecule
-    from scf.rhf import RHF
-    #we're using the geometry from the Crawford Projects
-    mol = molecule([['O', ( 0.000000000000, -0.143225816552, 0.000000000000)], 
-                    ['H', ( 1.638036840407,  1.136548822547 ,0.000000000000)], 
-                    ['H', (-1.638036840407,  1.136548822547 ,0.000000000000)]], 
-                    spin=0,
-                    units='bohr',
-                    charge=0,
-                    gto='sto-3g',
-                    silent=False,
-                    path='../harpy/basis/sto-3g.gbf')
-
-    scf = RHF(mol, 
-              cycles=50,
-              tol=1e-10,
-              diis=True)
-
-    scf_energy = scf.execute()
-    if not scf.converged: exit('SCF convergence failed')
-
-    tdhf = TDHF(scf, excitation_method='TDA')
-    tdhf.format('energy, eletric length, electric velocity, magnetic')
