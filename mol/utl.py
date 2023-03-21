@@ -242,3 +242,34 @@ def thomson_distribution(n, tolerance=1e-6, cycles=10000, view=None):
         visualize(surface, azimuth=view[0], elevation=view[1])
 
     return surface, cycle, u_thomson
+
+class waveform(object):
+    #supply a Gaussian or Lorentzian waveform function
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def gaussian(domain, x, rho, broaden=True):
+        '''
+        return a Gaussian wavefunction. rho is the standard deviation. domain are the
+        poles and for broadening x is the base linespace. Broaden = False gives the
+        maximum amplitude for stick graph.
+        '''
+
+        f = 1/(rho * np.sqrt(np.pi * 2.0))
+        if not broaden: return f
+
+        return f * np.exp(-0.5*pow((domain - x)/ rho, 2.0))
+
+    @staticmethod
+    def lorentzian(domain, x, rho, broaden=True):
+        '''
+        return a Lorentzian wavefunction. rho is the full-width at half maximum. domain
+        are the poles and for broadening x is the base linespace.
+        '''
+
+        f = 2.0 / (np.pi * rho)
+        if not broaden: return f
+
+        return (2.0 * rho / (np.pi)) / (pow(2*(domain - x), 2.0) + pow(rho, 2.0))
