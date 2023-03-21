@@ -99,11 +99,16 @@ class TDHF(object):
                 oscillator_velocity = (2 /3) / transition_energy * np.einsum('p,p->', velocity_electric, velocity_electric, optimize=True)
 
                 #compute the magnetic velocity gauge transition dipole
-                velocity_magnetic = np.einsum('ia,xia->x', tdm, self.angular()[:, o, v], optimize=True)
+                length_magnetic = np.einsum('ia,xia->x', tdm, self.angular()[:, o, v], optimize=True)
+                
+                #compute rotatory strengths
+                rotatory_length   =  sum(length_electric * length_magnetic)
+                rotatory_velocity = -sum(velocity_electric * length_magnetic) / transition_energy
 
                 self.cache.append({'energy':[transition_energy, energy_eV, energy_nm], 'excitation':[str(lo) + '->' + str(hi), str((lo+1)//2) + '->' + str((hi+1)//2)],
                                     'electric length':[length_electric, oscillator_length], 'electric velocity':[velocity_electric, oscillator_velocity],
-                                    'magnetic': velocity_magnetic})
+                                    'magnetic': length_magnetic,
+                                    'rotatory length': rotatory_length, 'rotatory velocity': rotatory_velocity})
 
     def format(self, roots=-1, methods='energy, electric length') :
         #output formatted tables
