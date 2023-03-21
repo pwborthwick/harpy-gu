@@ -146,12 +146,67 @@ class TDHF(object):
 
         for root, values in enumerate(cache):
 
-            if 'magnetic' in methods:
+            if 'magnetic length' in methods:
                 if root == 0:
-                    print('\nTDHF magnetic dipole velocity gauge analysis') 
+                    print('\nTDHF magnetic dipole length gauge analysis')
                     print('           x        y       z     \n-----------------------------------------------------')
-                print(' {:2}   {:>8.4f} {:>8.4f} {:>8.4f} '.format(root + 1, values['magnetic'][0], values['magnetic'][1],
-                                                                   values['magnetic'][2]))
+                print(' {:2}   {:>8.4f} {:>8.4f} {:>8.4f} '.format(root + 1, values['magnetic length'][0], values['magnetic length'][1],
+                                                                   values['magnetic length'][2]))
+
+    def circular_dichroism(self, roots, method='opa', units='nm', shape='gaussian:0.01:5000'):
+        #compute the one-photon absorption (OPA) or electronic circular dichroism (ECD)
+
+        waveform, rho, points = shape.split(':')
+        from mol.utl import waveform
+
+        profile = waveform.lorentzian if waveform == 'lorentzian' else waveform.gaussian
+
+        #get units and rho transform for waveform function
+        if units == 'eV':
+            unit_factor = CONSTANTS('hartree->eV')
+            func_rho = lambda x: float(rho) * unit_factor
+        if units == 'nm':
+            unit_factor = CONSTANTS('Eh') / (CONSTANTS('c') * CONSTANTS('planck') * 1e7)
+            func_rho = lambda x: (x*x * float(rho)) * unit_factor
+
+        #get the pole for x-axis sticks
+        cache = self.cache[:roots]
+        poles = np.array([x['energy'][0] for x in cache]) * unit_factor
+        if units == 'nm': poles = np.reciprocal(poles)
+
+        #get the residues for y-axis
+        if method == 'opa':
+            residues = np.array([np.linalg.norm(x['electric length'][0])**2 for x in cache])
+            transform = lambda x: x*x
+
+            factor  = (8 * pow(np.pi, 3) * CONSTANTS('avogadro') *
+                           pow(CONSTANTS('e') * CONSTANTS('bohr->angstrom') * 1e-8, 2))
+            factor /= (3 * 1000 * np.log(10) * 4 * np.pi * CONSTANTS('ke') * CONSTANTS('c') *
+                           1e-2 * CONSTANTS('planck'))
+
+        if method == 'ecd':
+            residues = np.array([x['rotatory length'] for x in cache])
+            transform = lambda x: x
+
+            factor  = (32 * pow(np.pi, 3) * CONSTANTS('avogadro') * CONSTANTS('e') *
+                           CONSTANTS('bohr->angstrom') * 1e-8 * 2 * CONSTANTS('bohr magneton')
+                           * 100)
+            factor /= (3 * 1000 * np.log(10) * 4 * np.pi * CONSTANTS('ke') * pow(CONSTANTS('c') *
+                           1e-2, 2) * CONSTANTS('planck'))
+
+        #poles (x) axis - broadening
+        margin = (np.max(poles) - np.min(poles)) * 0.2
+        x_axis = np.linspace(np.min(poles) - margin, np.max(poles) + margin, int(points))
+
+        #residues (y) axis - broadening
+        y_axis = factor * x_axis  * (np.sum([transform(r) * profile(p, x_axis, func_rho(p),
+                                     broaden=True) for p, r in zip(poles, residues)], axis=0))
+
+        #residues (y) axis - sticks
+        bars   = factor * np.array([p * transform(r) * profile(p, x_axis, func_rho(p), broaden=False)
+                                         for p, r in zip(poles, residues)])
+
+        return (x_axis, y_axis), (poles, bars)
 
 class RT_TDHF(object):
 
