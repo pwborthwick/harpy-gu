@@ -11,9 +11,7 @@ class LDA(object):
 
         self.exchange = self.correlation = None
         if xc == 'LDA': self.exchange = 'LDA'
-        if xc == 'LDA,VWN_RPA':
-            self.exchange = 'LDA'
-            self.correlation = 'VWN_RPA'
+        if xc == 'VWN_RPA': self.correlation = 'VWN_RPA'
 
     def evaluate_gto(gto, p):
         #compute the value of gaussian density at (x,y,z)
