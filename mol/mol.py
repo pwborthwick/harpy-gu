@@ -24,7 +24,11 @@ def CONSTANTS(name):
             'planck': 6.62607015e-34,
             'au->femtosecond': 0.02418884254,
             'alpha': 0.0072973525,
-            'em2->amu': 1822.8884850}
+            'em2->amu': 1822.8884850,
+            'avogadro': 6.022140857e+23,
+            'ke':8.854187817e-12,
+            'bohr magneton' : 9.274009994e-24,
+            'e': 1.6021766208e-19}
 
     return NIST[name]
 
