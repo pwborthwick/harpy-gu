@@ -1,14 +1,8 @@
 from mol.mol import molecule
 from scf.rhf import RHF
-import int.mo_spin as mos
-from phf.eig import solver
+
 from mol.mol import CONSTANTS
-from int.aello import aello
-
-import phf.cit as cit
-
 import numpy as np
-import scipy as sp
 
 from phf.tdhf import TDHF, RT_TDHF
 
