@@ -32,7 +32,7 @@
 
 **mol.mol** - constants definition, z-file creation, reading basis files.
 
-**mol.utl**   - Pade approximates, spectrum analysis, integrators for BOMD, bond determination (is_bond), Thompson spherical distribution.
+**mol.utl**   - Pade approximates, spectrum analysis, integrators for BOMD, bond determination (is_bond), Thompson spherical distribution. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Spectra broadening wave shapes.
 
 **int.aello** - Cython integrals: overlap, 1e kinetic and coulomb, 2e repulsion, dipole, nabla, angular momentum and electric field. Force (gradient) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;integrals for overlap, 1e kinetic and coulomb, 2e repulsion.
 
@@ -79,9 +79,9 @@
 
 **phf.rESP** - restrained Electrostatic Potentials. point distribution on spherical surface by Connolly, Fibonacci, Saff & Kuijlaars and Thomson. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constrained, restrained and carbon group refinement.
 
-**phf.tdhf** - time-dependent Hartree-Fock. Transition properties - electric and magnetic dipoles in length and velcity gauges. Oscillator &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strengths. Real-time TDHF using Magnus (2) propogator.
+**phf.tdhf** - time-dependent Hartree-Fock. Transition properties - electric and magnetic dipoles in length and velcity gauges. Oscillator &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and rotatary strengths. Optical properties OPA and ECD. Real-time TDHF using Magnus (2) propogator.
 
 <ins>**Example Scripts**</ins>
 
-There are a number (19) of examples of using the modules in *harpy-gu*, the files are heavily annotated and togther with the source should give a good idea of how to get results from the code. Where possible the code has been checked against either PySCF or Psi4 for accuracy. I hope there is something useful here for people building their own code (even if it's how not to code it!)
+There are a number (21) of examples of using the modules in *harpy-gu*, the files are heavily annotated and togther with the source should give a good idea of how to get results from the code. Where possible the code has been checked against either PySCF or Psi4 for accuracy. I hope there is something useful here for people building their own code (even if it's how not to code it!)
 
